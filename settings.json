@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run test:*)",
+      "Bash(git:*)",
+      "Read(./src/**)",
+      "Edit(./src/**)"
+    ],
+    "deny": [
+      "Bash(npm publish:*)",
+      "WebFetch(domain:*)"
+    ]
+  },
+  "includeCoAuthoredBy": false
+}
