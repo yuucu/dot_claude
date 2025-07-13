@@ -1,16 +1,74 @@
 {
+  "includeCoAuthoredBy": false,
+  "cleanupPeriodDays": 30,
+  "env": {
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "8192",
+    "BASH_DEFAULT_TIMEOUT_MS": "120000",
+    "BASH_MAX_OUTPUT_LENGTH": "30000",
+    "DISABLE_COST_WARNINGS": "0",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
+  },
   "permissions": {
+    "additionalDirectories": [
+      "../",
+      "~/.config/"
+    ],
     "allow": [
       "Bash(npm run lint)",
       "Bash(npm run test:*)",
       "Bash(git:*)",
       "Read(./src/**)",
-      "Edit(./src/**)"
+      "Edit(./src/**)",
+      "Bash(chezmoi *)",
+      "Bash(docker *)",
+      "Bash(pnpm *)",
+      "Read(~/.config/**)",
+      "Read(../**)",
+      "WebFetch(domain:github.com)",
+      "WebSearch"
     ],
     "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf $HOME)",
+      "Bash(rm -rf ~/*)",
       "Bash(npm publish:*)",
-      "WebFetch(domain:*)"
-    ]
+      "WebFetch(domain:*)",
+      "Bash(git config *)",
+      "Bash(brew install *)",
+      "Bash(chmod 777 *)",
+      "Bash(gh repo delete:*)",
+      "Bash(sudo *)",
+      "Bash(curl *://http*)",
+      "Write(/etc/*)",
+      "Edit(/etc/*)"
+    ],
+    "defaultMode": "bypassPermissions"
   },
-  "includeCoAuthoredBy": false
+  "model": "sonnet",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/deny-check.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Invoke \\\"Stop\\\" event.\" with title \"Claude Code\" sound name \"Frog\"'"
+          }
+        ]
+      }
+    ]
+  }
 }
